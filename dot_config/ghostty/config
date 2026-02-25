@@ -1,45 +1,37 @@
-# Ghostty terminal configuration
+# Omarchy Ghostty configuration (DHH, Feb 2026)
 
 # Font
 font-family = JetBrainsMono Nerd Font
-font-size = 13
-
-# Theme - Catppuccin Mocha
-background = 1e1e2e
-foreground = cdd6f4
-
-# Catppuccin Mocha palette
-palette = 0=#45475a
-palette = 1=#f38ba8
-palette = 2=#a6e3a1
-palette = 3=#f9e2af
-palette = 4=#89b4fa
-palette = 5=#cba6f7
-palette = 6=#89dceb
-palette = 7=#bac2de
-palette = 8=#585b70
-palette = 9=#f38ba8
-palette = 10=#a6e3a1
-palette = 11=#f9e2af
-palette = 12=#89b4fa
-palette = 13=#cba6f7
-palette = 14=#94e2d5
-palette = 15=#a6adc8
+font-style = Regular
+font-size = 9
 
 # Window
-window-padding-x = 8
-window-padding-y = 4
-window-decoration = false
-gtk-titlebar = false
-
-# Behavior
-copy-on-select = clipboard
+window-theme = ghostty
+window-padding-x = 14
+window-padding-y = 14
 confirm-close-surface = false
-mouse-hide-while-typing = true
+resize-overlay = never
+gtk-toolbar-style = flat
 
-# Cursor
+# Cursor styling
 cursor-style = block
 cursor-style-blink = false
 
-# Scrollback
-scrollback-limit = 10000
+# Cursor styling + SSH session terminfo
+# (all shell integration options must be passed together)
+shell-integration-features = no-cursor,ssh-env
+
+# Keyboard bindings
+keybind = shift+insert=paste_from_clipboard
+keybind = control+insert=copy_to_clipboard
+keybind = super+control+shift+alt+arrow_down=resize_split:down,100
+keybind = super+control+shift+alt+arrow_up=resize_split:up,100
+keybind = super+control+shift+alt+arrow_left=resize_split:left,100
+keybind = super+control+shift+alt+arrow_right=resize_split:right,100
+
+# Slowdown mouse scrolling
+mouse-scroll-multiplier = 0.95
+
+# Fix general slowness on hyprland
+# https://github.com/ghostty-org/ghostty/discussions/3224
+async-backend = epoll

@@ -1,5 +1,5 @@
 #!/bin/bash
-# Configure shell integrations
+# Configure shell integrations (Omarchy-style)
 
 set -euo pipefail
 
@@ -13,6 +13,10 @@ add_to_bashrc() {
         echo "$content" >> "$BASHRC"
     fi
 }
+
+# Mise runtime manager
+add_to_bashrc "mise activate" '# Mise runtime manager
+eval "$(mise activate bash)"'
 
 # Starship prompt
 add_to_bashrc "starship init" '# Starship prompt
@@ -30,17 +34,9 @@ eval "$(direnv hook bash)"'
 add_to_bashrc "fzf --bash" '# fzf keybindings and completion
 eval "$(fzf --bash)"'
 
-# Common aliases
-add_to_bashrc "# Stable-Omarchy aliases" '# Stable-Omarchy aliases
-alias ls="eza --icons"
-alias ll="eza -la --icons --git"
-alias lt="eza --tree --icons --level=2"
-alias cat="bat --paging=never"
-alias grep="rg"
-alias find="fd"
-alias top="btop"
-alias lg="lazygit"
-alias ld="lazydocker"
-alias db="distrobox"'
+# Source Omarchy-style aliases and functions
+add_to_bashrc "bash/aliases" '# Omarchy aliases and tmux functions
+[ -f ~/.config/bash/aliases ] && source ~/.config/bash/aliases
+[ -f ~/.config/bash/fns/tmux ] && source ~/.config/bash/fns/tmux'
 
 echo "Shell integrations configured"
