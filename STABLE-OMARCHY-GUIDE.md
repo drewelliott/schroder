@@ -100,13 +100,13 @@ Use a pre-built community image like [hyprland-atomic](https://github.com/cjunio
 
 ### Step 1: Download Aurora NVIDIA ISO
 
-Download from [getaurora.dev](https://getaurora.dev). Select the **NVIDIA** variant (for RTX-Series/GTX 16xx). There is no separate "DX" ISO -- developer mode is enabled post-install.
+Download from [getaurora.dev](https://getaurora.dev) or directly from [dl.getaurora.dev](https://dl.getaurora.dev/). Select the **NVIDIA** variant (`aurora-nvidia-open-stable-webui-x86_64.iso`). There is no separate "DX" ISO — developer mode is enabled post-install.
 
 ### Step 2: Create Bootable USB
 
 ```bash
 # On an existing Linux/macOS machine
-sudo dd if=aurora-nvidia-*.iso of=/dev/sdX bs=4M status=progress oflag=sync
+sudo dd if=aurora-nvidia-open-stable-webui-x86_64.iso of=/dev/sdX bs=4M status=progress oflag=sync
 ```
 
 Use [Fedora Media Writer](https://flathub.org/apps/org.fedoraproject.MediaWriter), [Rufus](https://rufus.ie/), or [Etcher](https://etcher.balena.io/).
@@ -132,11 +132,11 @@ After first boot, verify and pin to a specific Fedora version tag (never use `la
 # Check current image
 rpm-ostree status
 
-# If on :latest, rebase to a pinned version (e.g., Fedora 42)
-rpm-ostree rebase ostree-image-signed:docker://ghcr.io/ublue-os/aurora:42
+# If on :latest, rebase to the stable stream (pinned to Fedora 43)
+rpm-ostree rebase ostree-image-signed:docker://ghcr.io/ublue-os/aurora-nvidia-open:stable
 ```
 
-> **Important**: Per project policy, we cannot use "latest" tags. Always pin to a specific Fedora version number (`:41`, `:42`, etc.).
+> **Important**: Per project policy, we cannot use `:latest` tags. Use `:stable` (weekly gated builds, recommended) or pin to a specific Fedora version (`:43`). See [Aurora Release Streams](https://docs.getaurora.dev/guides/release-streams/) for options.
 
 ---
 
@@ -240,7 +240,7 @@ rpm-ostree rebase ostree-image-signed:docker://ghcr.io/cjuniorfox/hyprland-atomi
 Fork the [Universal Blue image template](https://github.com/ublue-os/image-template) and create a Containerfile that inherits from the Aurora NVIDIA image and adds Hyprland:
 
 ```dockerfile
-FROM ghcr.io/ublue-os/aurora:42
+FROM ghcr.io/ublue-os/aurora-nvidia-open:43
 
 # Add Hyprland COPR (ashbuk's repo — clean, minimal Fedora-compliant builds)
 RUN dnf copr enable -y ashbuk/Hyprland-Fedora
@@ -270,7 +270,7 @@ RUN rm -rf /var/cache/* /tmp/*
 Build and push to a container registry (GitHub Container Registry works well), then rebase:
 
 ```bash
-rpm-ostree rebase ostree-image-signed:docker://ghcr.io/YOUR_USER/stable-omarchy:42
+rpm-ostree rebase ostree-image-signed:docker://ghcr.io/YOUR_USER/stable-omarchy:43
 ```
 
 #### Option C: Layer Hyprland via COPR (Simplest, Less Clean)
@@ -568,7 +568,7 @@ Distrobox is included with Aurora's developer mode (`ujust devmode`). It creates
 
 ```bash
 # Fedora dev container (for dnf-based workflows)
-distrobox create --name fedora-dev --image registry.fedoraproject.org/fedora-toolbox:42
+distrobox create --name fedora-dev --image registry.fedoraproject.org/fedora-toolbox:43
 
 # Arch Linux container (for AUR access)
 distrobox create --name arch-dev --image archlinux:latest
@@ -609,7 +609,7 @@ Create `~/.config/distrobox/distrobox.ini`:
 
 ```ini
 [fedora-dev]
-image=registry.fedoraproject.org/fedora-toolbox:42
+image=registry.fedoraproject.org/fedora-toolbox:43
 additional_packages="gcc gcc-c++ make cmake git curl wget openssl-devel"
 
 [arch-dev]
@@ -617,7 +617,7 @@ image=archlinux:latest
 additional_packages="base-devel git"
 
 [ai-dev]
-image=registry.fedoraproject.org/fedora-toolbox:42
+image=registry.fedoraproject.org/fedora-toolbox:43
 additional_packages="gcc gcc-c++ python3-pip python3-devel cuda-toolkit nvidia-driver-cuda"
 additional_flags="--gpus all"
 ```
@@ -694,7 +694,7 @@ podman run --rm --gpus all nvidia/cuda:12.6.0-runtime-ubi9 nvidia-smi
 > **Distrobox GPU Note**: The `--nvidia` flag in Distrobox has known issues on Fedora Atomic. Use `--additional-flags "--gpus all"` instead:
 > ```bash
 > distrobox create --name ai-dev \
->     --image registry.fedoraproject.org/fedora-toolbox:42 \
+>     --image registry.fedoraproject.org/fedora-toolbox:43 \
 >     --additional-flags "--gpus all"
 > ```
 
