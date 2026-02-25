@@ -4,8 +4,11 @@
 
 set -euo pipefail
 
-if ! command -v brew &> /dev/null; then
-    echo "Homebrew not found, skipping (expected on Aurora-DX)"
+# Ensure brew is on PATH (Aurora installs it but profile.d may not be sourced)
+if [ -x /home/linuxbrew/.linuxbrew/bin/brew ]; then
+    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+elif ! command -v brew &> /dev/null; then
+    echo "Homebrew not found, skipping"
     exit 0
 fi
 
