@@ -24,7 +24,7 @@ brew install btop dust duf procs
 brew install jq yq sd xh
 
 # Shell & Terminal
-brew install starship tmux direnv
+brew install tmux direnv
 
 # Editors
 brew install neovim

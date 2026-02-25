@@ -18,10 +18,6 @@ add_to_bashrc() {
 add_to_bashrc "mise activate" '# Mise runtime manager
 eval "$(mise activate bash)"'
 
-# Starship prompt
-add_to_bashrc "starship init" '# Starship prompt
-eval "$(starship init bash)"'
-
 # Zoxide (smart cd)
 add_to_bashrc "zoxide init" '# Zoxide smart cd
 eval "$(zoxide init bash)"'

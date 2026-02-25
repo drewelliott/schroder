@@ -63,7 +63,6 @@ dot_config/
   bash/aliases              # Omarchy shell aliases
   bash/fns/tmux             # tml/nic/nicx dev layout functions
   ghostty/config            # Terminal
-  starship.toml             # Prompt
   mise/config.toml.tmpl     # Runtime versions (templated)
   git/config                # Git aliases + ergonomics
   distrobox/distrobox.ini   # Container definitions
