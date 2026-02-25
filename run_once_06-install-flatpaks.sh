@@ -10,7 +10,9 @@ fi
 
 echo "Installing Flatpak apps..."
 
-# Use --user to avoid polkit/system-helper permission issues during automated install
+# Ensure flathub remote is available for user installs
+flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+
 flatpak install --user -y --noninteractive flathub \
     com.obsproject.Studio \
     com.spotify.Client \
