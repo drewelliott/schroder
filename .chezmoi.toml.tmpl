@@ -1,9 +1,6 @@
-# Chezmoi configuration - prompted on first `chezmoi init`
-# Machine-specific values used in templates
-
 {{- $hostname := promptStringOnce . "hostname" "Hostname" -}}
 {{- $gpu := promptChoiceOnce . "gpu" "GPU vendor" (list "nvidia" "amd" "intel") -}}
-{{- $is_workstation := promptBoolOnce . "is_workstation" "Is this the AI/content creation workstation" -}}
+{{- $is_workstation := promptBoolOnce . "is_workstation" "Is this the AI/content creation workstation" }}
 
 [data]
     hostname = {{ $hostname | quote }}
