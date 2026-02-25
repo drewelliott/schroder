@@ -19,7 +19,7 @@ sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply drewelliott/schroder
 ```
 
 This will:
-1. Deploy Ghostty, tmux, bash, git, and starship configs
+1. Deploy Ghostty, tmux, bash, and git configs
 2. Install Mise and configure runtimes (Node, Python, Go, Rust)
 3. Install CLI tools via Homebrew (ripgrep, fzf, neovim, lazygit, ollama, etc.)
 4. Create Distrobox containers (fedora-dev, arch-dev, ai-dev)
@@ -46,7 +46,6 @@ nicm/nicxm # tml per subdirectory (monorepo workflow)
 | Dotfiles | Chezmoi | Templated configs, bootstrap scripts |
 | Containers | Distrobox | fedora-dev, arch-dev (AUR), ai-dev (GPU) |
 | GUI apps | Flatpak | OBS, Chromium, Spotify, LibreOffice |
-| System | rpm-ostree | keyd (macOS keybindings) |
 
 ### AI/ML
 Ollama for local LLM inference on the RTX 5080 (16GB VRAM). GPU-enabled Distrobox container for vLLM, CrewAI, LangGraph, and other agent frameworks.
@@ -66,8 +65,6 @@ dot_config/
   mise/config.toml.tmpl     # Runtime versions (templated)
   git/config                # Git aliases + ergonomics
   distrobox/distrobox.ini   # Container definitions
-private_dot_config/
-  keyd/default.conf         # macOS-style key remapping
 run_once_01-install-mise.sh
 run_once_02-install-brew-packages.sh
 run_onchange_03-install-mise-tools.sh.tmpl

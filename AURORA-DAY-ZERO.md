@@ -96,26 +96,7 @@ Developer mode adds: Docker, Podman, Distrobox, Homebrew, Mise, virt-manager, VS
 
 ---
 
-## Phase 3: System-Level Services
-
-Only layer packages that genuinely need kernel/system-level access:
-
-```bash
-# keyd for macOS-style key remapping
-sudo curl -Lo /etc/yum.repos.d/alternateved-keyd.repo \
-    "https://copr.fedorainfracloud.org/coprs/alternateved/keyd/repo/fedora-$(rpm -E %fedora)/alternateved-keyd-fedora-$(rpm -E %fedora).repo"
-
-rpm-ostree install keyd
-systemctl reboot
-
-sudo systemctl enable --now keyd
-```
-
-Everything else goes through Homebrew, Flatpak, Distrobox, or Mise.
-
----
-
-## Phase 4: Apply Dotfiles
+## Phase 3: Apply Dotfiles
 
 ```bash
 # One-liner to bootstrap everything
@@ -125,7 +106,7 @@ sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply drewelliott/schroder
 This will:
 1. Install Chezmoi and clone the dotfiles repo
 2. Prompt for machine-specific values (hostname, GPU vendor, workstation flag)
-3. Deploy Ghostty, tmux, bash, git, starship, and mise configs
+3. Deploy Ghostty, tmux, bash, git, and mise configs
 4. Run bootstrap scripts: install Mise, Homebrew CLI tools, Distrobox containers, shell setup
 
 ### Flatpak Apps (Manual)
@@ -148,7 +129,6 @@ flatpak install flathub org.libreoffice.LibreOffice
 [ ] Enroll Secure Boot MOK key (password: universalblue)
 [ ] Verify NVIDIA driver (570.86.16+, open kernel modules)
 [ ] Enable developer mode (ujust devmode + ujust dx-group)
-[ ] Layer keyd via rpm-ostree, configure macOS bindings
 [ ] Run chezmoi init --apply drewelliott/schroder
 [ ] Install Flatpak apps (OBS, Chromium, Spotify)
 [ ] Verify: mise install, ollama serve, distrobox list
@@ -163,4 +143,3 @@ flatpak install flathub org.libreoffice.LibreOffice
 - [NVIDIA 570.86.16 Linux Driver (RTX 5080)](https://www.phoronix.com/news/NVIDIA-570.86.16-Linux-Driver)
 - [Mise Runtime Manager](https://mise.jdx.dev/)
 - [Chezmoi Dotfile Manager](https://www.chezmoi.io/)
-- [keyd Key Remapper](https://github.com/rvaiya/keyd)
