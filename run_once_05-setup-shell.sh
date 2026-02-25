@@ -1,5 +1,7 @@
 #!/bin/bash
-# Configure shell integrations (Omarchy-style)
+# Configure shell integrations
+# NOTE: Aurora's bling.sh already handles mise, zoxide, direnv, starship, and eza.
+# We only add our custom aliases and tmux functions here.
 
 set -euo pipefail
 
@@ -13,22 +15,6 @@ add_to_bashrc() {
         echo "$content" >> "$BASHRC"
     fi
 }
-
-# Mise runtime manager
-add_to_bashrc "mise activate" '# Mise runtime manager
-eval "$(mise activate bash)"'
-
-# Zoxide (smart cd)
-add_to_bashrc "zoxide init" '# Zoxide smart cd
-eval "$(zoxide init bash)"'
-
-# Direnv
-add_to_bashrc "direnv hook" '# Direnv per-directory env
-eval "$(direnv hook bash)"'
-
-# fzf
-add_to_bashrc "fzf --bash" '# fzf keybindings and completion
-eval "$(fzf --bash)"'
 
 # Source Omarchy-style aliases and functions
 add_to_bashrc "bash/aliases" '# Omarchy aliases and tmux functions
