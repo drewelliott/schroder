@@ -1,8 +1,10 @@
 # Stable-Omarchy: Day Zero Installation Guide
 
-> Aurora-DX (Immutable Fedora) + Hyprland + Local LLM Development + OBS Content Creation
+> Aurora (Immutable Fedora) + Developer Mode + Hyprland + Local LLM Development + OBS Content Creation
 >
 > **Hardware**: AMD Ryzen 9 9950X | NVIDIA RTX 5080 | 64GB DDR5-6000 | ASUS ROG Strix X870E-E
+>
+> **Note**: Aurora-DX is not a separate ISO. You install vanilla Aurora (NVIDIA variant) and enable developer mode with `ujust devmode` after first boot. In 2026, Aurora plans to merge DX features into the base image with Docker/containerd included by default.
 
 ---
 
@@ -86,40 +88,40 @@ Navigate to **Advanced > PCI Subsystem Settings**:
 
 ### Choosing Your Image Strategy
 
-There are two paths to get Hyprland on Aurora-DX. Choose one:
+There are two paths to get Hyprland on Aurora. Choose one:
 
-#### Option A: Aurora-DX Base + Custom Hyprland Image (Recommended)
+#### Option A: Aurora NVIDIA + devmode + Hyprland (Recommended)
 
-Start with Aurora-DX NVIDIA as the base, then rebase to a custom image that adds Hyprland. This gives you the full Aurora-DX developer tooling (Homebrew, Distrobox, ujust recipes) plus Hyprland.
+Start with vanilla Aurora (NVIDIA variant), enable developer mode with `ujust devmode`, then add Hyprland via a community image rebase, custom image build, or COPR layering. This gives you the full Aurora developer tooling (Homebrew, Distrobox, Docker, Mise) plus Hyprland.
 
 #### Option B: Community Hyprland-Atomic Image
 
-Use a pre-built community image like [hyprland-atomic](https://github.com/cjuniorfox/hyprland-atomic) which provides Hyprland on Fedora Atomic out of the box.
+Use a pre-built community image like [hyprland-atomic](https://github.com/cjuniorfox/hyprland-atomic) which provides Hyprland on Fedora Atomic out of the box. Note: this replaces Aurora entirely and you lose Aurora's ujust recipes and developer mode.
 
-### Step 1: Download Aurora-DX NVIDIA ISO
+### Step 1: Download Aurora NVIDIA ISO
 
-Download from [getaurora.dev](https://getaurora.dev). Select:
-- **Aurora-DX** (developer variant)
-- **NVIDIA** variant
+Download from [getaurora.dev](https://getaurora.dev). Select the **NVIDIA** variant (for RTX-Series/GTX 16xx). There is no separate "DX" ISO -- developer mode is enabled post-install.
 
 ### Step 2: Create Bootable USB
 
 ```bash
 # On an existing Linux/macOS machine
-sudo dd if=aurora-dx-nvidia-*.iso of=/dev/sdX bs=4M status=progress oflag=sync
+sudo dd if=aurora-nvidia-*.iso of=/dev/sdX bs=4M status=progress oflag=sync
 ```
 
-Or use [Ventoy](https://www.ventoy.net/) / [Fedora Media Writer](https://flathub.org/apps/org.fedoraproject.MediaWriter).
+Use [Fedora Media Writer](https://flathub.org/apps/org.fedoraproject.MediaWriter), [Rufus](https://rufus.ie/), or [Etcher](https://etcher.balena.io/).
+
+> **Warning**: Ventoy is **not supported** by Aurora. Do not use it to boot the installation media.
 
 ### Step 3: Install
 
 1. Boot from USB (F8 on ROG Strix for boot menu)
-2. Follow the Anaconda installer
+2. Follow the installer
 3. **Partitioning recommendation**:
    - `/boot/efi` - 512MB EFI System Partition
    - `/boot` - 1GB ext4
    - `/` - Remainder (btrfs recommended for snapshots)
-4. Set hostname, create user, set root password
+4. Set hostname, create user. **Leave Root Account disabled** (Aurora requirement).
 5. Complete installation and reboot
 
 ### Step 4: Pin Image Version
@@ -131,7 +133,7 @@ After first boot, verify and pin to a specific Fedora version tag (never use `la
 rpm-ostree status
 
 # If on :latest, rebase to a pinned version (e.g., Fedora 42)
-rpm-ostree rebase ostree-image-signed:docker://ghcr.io/ublue-os/aurora-dx-nvidia:42
+rpm-ostree rebase ostree-image-signed:docker://ghcr.io/ublue-os/aurora:42
 ```
 
 > **Important**: Per project policy, we cannot use "latest" tags. Always pin to a specific Fedora version number (`:41`, `:42`, etc.).
@@ -142,7 +144,7 @@ rpm-ostree rebase ostree-image-signed:docker://ghcr.io/ublue-os/aurora-dx-nvidia
 
 ### Enroll Secure Boot Key
 
-Universal Blue pre-signs NVIDIA kernel modules with their own MOK. Enroll it:
+Universal Blue pre-signs NVIDIA kernel modules with their own MOK. This is normally handled automatically during installation -- the installer prompts you to "Enroll MOK." If you missed it or need to re-enroll:
 
 ```bash
 ujust enroll-secure-boot-key
@@ -150,7 +152,7 @@ ujust enroll-secure-boot-key
 
 Reboot. The MOK Manager (shim) will appear:
 1. Select "Enroll MOK"
-2. Enter the password shown during enrollment
+2. Enter the password: **`universalblue`** (this is the hardcoded MOK password for all Universal Blue images)
 3. Confirm and reboot
 
 ### Verify NVIDIA Drivers
@@ -174,21 +176,42 @@ nvidia-smi -L
 > # Should reference "Open" kernel module
 > ```
 
-### Run Aurora-DX Setup Recipes
+### Enable Developer Mode
+
+Aurora-DX is not a separate image. Enable developer features on your vanilla Aurora install:
 
 ```bash
-# List all available ujust recipes
+# Enable developer mode (adds Docker, Podman, VS Code, Distrobox, dev tools)
+ujust devmode
+
+# Reboot after devmode completes
+systemctl reboot
+
+# Add yourself to developer groups (Docker, libvirt, etc.)
+ujust dx-group
+
+# Log out and back in for group changes to take effect
+```
+
+Developer mode adds: Docker Engine, Podman, Podman Desktop, Distrobox, VS Code with Dev Containers, Homebrew, Mise, virt-manager (KVM/QEMU), Cockpit, performance profiling tools (sysprof, bcc, bpftrace), and optional installs for JetBrains, Neovim, Kubernetes tools, and AI tools.
+
+### Explore Available Recipes
+
+```bash
+# Browse all available ujust commands interactively
+ujust --choose
+
+# Or list them
 ujust --list
 
-# NVIDIA verification
-ujust nvidia-test
+# Install curated CLI tools
+ujust aurora-cli
 
-# Set up virtualization (KVM/QEMU/libvirt)
-ujust setup-virtualization
-
-# Set up Docker (if you prefer Docker over Podman)
-ujust setup-docker
+# Manual system update (automatic daily updates are enabled by default)
+ujust update
 ```
+
+> **Note**: Unlike Bazzite, Aurora does **not** have `ujust setup-virtualization` or `ujust nvidia-test` recipes. Virtualization (virt-manager/KVM/QEMU) is included when you enable devmode. NVIDIA drivers are baked into the NVIDIA image and can be verified with `nvidia-smi`.
 
 ---
 
@@ -203,34 +226,33 @@ The cleanest approach on Fedora Atomic is to rebase to an image that includes Hy
 The [hyprland-atomic](https://github.com/cjuniorfox/hyprland-atomic) project provides pre-built images:
 
 ```bash
-# Rebase to hyprland-atomic (Solopasha variant with Fedora 43)
+# Rebase to hyprland-atomic (Fedora 43 variant)
 rpm-ostree rebase ostree-image-signed:docker://ghcr.io/cjuniorfox/hyprland-atomic-solopasha:43
 
 # Or the virtualization variant (includes libvirt/QEMU)
 rpm-ostree rebase ostree-image-signed:docker://ghcr.io/cjuniorfox/hyprland-atomic-solopasha-virt:43
 ```
 
-> **Note**: This replaces the Aurora-DX base. You may lose some Aurora-DX-specific ujust recipes. Evaluate whether the community image meets your needs.
+> **Note**: This replaces the Aurora base. You may lose some Aurora-specific ujust recipes. Evaluate whether the community image meets your needs. These images currently use packages from the solopasha COPR which has had maintenance gaps — check the [hyprland-atomic issues](https://github.com/cjuniorfox/hyprland-atomic/issues) for current status.
 
 #### Option B: Build a Custom Image (Maximum Control)
 
-Fork the [Universal Blue image template](https://github.com/ublue-os/image-template) and create a Containerfile that inherits from Aurora-DX NVIDIA and adds Hyprland:
+Fork the [Universal Blue image template](https://github.com/ublue-os/image-template) and create a Containerfile that inherits from the Aurora NVIDIA image and adds Hyprland:
 
 ```dockerfile
-FROM ghcr.io/ublue-os/aurora-dx-nvidia:42
+FROM ghcr.io/ublue-os/aurora:42
 
-# Add Hyprland COPR (Solopasha's repo is well-maintained for Fedora)
-RUN curl -Lo /etc/yum.repos.d/solopasha-hyprland.repo \
-    https://copr.fedorainfracloud.org/coprs/solopasha/hyprland/repo/fedora-42/solopasha-hyprland-fedora-42.repo
+# Add Hyprland COPR (ashbuk's repo — clean, minimal Fedora-compliant builds)
+RUN dnf copr enable -y ashbuk/Hyprland-Fedora
 
 # Install Hyprland and ecosystem
 RUN rpm-ostree install \
     hyprland \
+    xdg-desktop-portal-hyprland \
     hyprpaper \
     hyprlock \
     hypridle \
     hyprpicker \
-    xdg-desktop-portal-hyprland \
     waybar \
     wofi \
     dunst \
@@ -253,17 +275,16 @@ rpm-ostree rebase ostree-image-signed:docker://ghcr.io/YOUR_USER/stable-omarchy:
 
 #### Option C: Layer Hyprland via COPR (Simplest, Less Clean)
 
-If you want to stay on the Aurora-DX base without rebasing:
+If you want to stay on the Aurora base without rebasing:
 
 ```bash
-# Add Solopasha's Hyprland COPR
-sudo curl -Lo /etc/yum.repos.d/solopasha-hyprland.repo \
-    "https://copr.fedorainfracloud.org/coprs/solopasha/hyprland/repo/fedora-$(rpm -E %fedora)/solopasha-hyprland-fedora-$(rpm -E %fedora).repo"
+# Add ashbuk's Hyprland COPR (actively maintained, Fedora-compliant builds)
+sudo dnf copr enable ashbuk/Hyprland-Fedora
 
 # Layer Hyprland packages
 rpm-ostree install \
-    hyprland hyprpaper hyprlock hypridle hyprpicker \
-    xdg-desktop-portal-hyprland \
+    hyprland xdg-desktop-portal-hyprland \
+    hyprpaper hyprlock hypridle hyprpicker \
     waybar wofi dunst wl-clipboard \
     grim slurp swappy polkit-gnome
 
@@ -278,20 +299,20 @@ These are the Omarchy (Arch/Hyprland) components and their Fedora equivalents:
 
 | Omarchy Component | Role | Fedora/Aurora Equivalent |
 |---|---|---|
-| Hyprland | Tiling Wayland compositor | Hyprland (via COPR/custom image) |
-| Waybar | Status bar | Waybar (via COPR/custom image) |
+| Hyprland | Tiling Wayland compositor | Hyprland (via custom image or COPR) |
+| Waybar | Status bar | Waybar (via custom image or COPR) |
 | Ghostty | Terminal emulator | Ghostty (Flatpak or Homebrew) |
 | Neovim | Editor | `brew install neovim` |
-| Wofi / Rofi-wayland | App launcher | Wofi (via COPR/custom image) |
-| Hyprpaper | Wallpaper | Hyprpaper (via COPR/custom image) |
-| Hyprlock | Lock screen | Hyprlock (via COPR/custom image) |
-| Hypridle | Idle daemon | Hypridle (via COPR/custom image) |
-| Dunst / Mako | Notifications | Dunst (via COPR/custom image) |
+| Wofi / Rofi-wayland | App launcher | Wofi (via custom image or COPR) |
+| Hyprpaper | Wallpaper | Hyprpaper (via custom image or COPR) |
+| Hyprlock | Lock screen | Hyprlock (via custom image or COPR) |
+| Hypridle | Idle daemon | Hypridle (via custom image or COPR) |
+| Dunst / Mako | Notifications | Dunst (via custom image or COPR) |
 | Chromium | Browser | Chromium (Flatpak) |
 | Spotify | Music | Spotify (Flatpak) |
 | LibreOffice | Office suite | LibreOffice (Flatpak) |
 | Mise | Runtime manager | `brew install mise` or `curl https://mise.run \| sh` |
-| Docker | Containers | Podman (pre-installed) or Docker via `ujust setup-docker` |
+| Docker | Containers | Podman (pre-installed) or Docker (included with `ujust devmode`) |
 | Lazydocker | Docker TUI | `brew install lazydocker` |
 | GitHub CLI | Git operations | `brew install gh` |
 
@@ -422,7 +443,7 @@ Mise replaces asdf, nvm, pyenv, rbenv, and goenv. It installs everything to `~/.
 # Install Mise
 curl https://mise.run | sh
 
-# Or via Homebrew (Aurora-DX ships with brew)
+# Or via Homebrew (Aurora ships with brew after devmode is enabled)
 brew install mise
 ```
 
@@ -451,7 +472,7 @@ mise install  # Install all configured runtimes
 
 ### Homebrew CLI Tools
 
-Aurora-DX ships with Homebrew pre-installed. Install the essential toolkit:
+Aurora ships with Homebrew after devmode is enabled. Install the essential toolkit:
 
 ```bash
 # File & Search
@@ -541,7 +562,7 @@ exec-once = dunst
 
 ## Phase 6: Distrobox Development Containers
 
-Distrobox is pre-installed on Aurora-DX. It creates tightly host-integrated containers sharing your home directory, Wayland session, GPU, and network.
+Distrobox is included with Aurora's developer mode (`ujust devmode`). It creates tightly host-integrated containers sharing your home directory, Wayland session, GPU, and network.
 
 ### Create Development Containers
 
@@ -598,7 +619,7 @@ additional_packages="base-devel git"
 [ai-dev]
 image=registry.fedoraproject.org/fedora-toolbox:42
 additional_packages="gcc gcc-c++ python3-pip python3-devel cuda-toolkit nvidia-driver-cuda"
-nvidia=true
+additional_flags="--gpus all"
 ```
 
 ```bash
@@ -662,7 +683,7 @@ vllm serve meta-llama/Llama-3.1-8B-Instruct \
 For GPU access in Podman/Docker containers:
 
 ```bash
-# Install NVIDIA Container Toolkit (if not pre-installed on Aurora-DX)
+# Install NVIDIA Container Toolkit (if not already present)
 curl -s -L https://nvidia.github.io/libnvidia-container/stable/rpm/nvidia-container-toolkit.repo | \
     sudo tee /etc/yum.repos.d/nvidia-container-toolkit.repo
 
@@ -780,13 +801,22 @@ OBS_USE_EGL=1 flatpak run com.obsproject.Studio
 
 ## Phase 9: KVM/QEMU Virtualization
 
-### Setup (via ujust)
+### Setup
+
+Virtualization support (libvirt, QEMU, virt-manager) comes pre-configured with Aurora's developer mode (`ujust devmode` from Phase 2). Your user is already in the libvirt group if you ran `ujust dx-group`.
+
+Verify it's working:
 
 ```bash
-ujust setup-virtualization
+systemctl status libvirtd
+virsh list --all
 ```
 
-This installs and configures libvirt, QEMU, and virt-manager, adds your user to the libvirt group, and enables services.
+If libvirtd isn't running:
+
+```bash
+sudo systemctl enable --now libvirtd
+```
 
 ### Kernel Parameters for IOMMU
 
@@ -922,7 +952,7 @@ fi
 
 ### Final Apply
 
-On a fresh Aurora-DX machine, the entire setup is a single command:
+On a fresh Aurora machine (with devmode enabled), the entire setup is a single command:
 
 ```bash
 # One-liner to bootstrap everything
@@ -942,14 +972,14 @@ This will:
 
 ### Complete Arch-to-Fedora Dependency Map
 
-| Arch/AUR Package | Aurora-DX Alternative | Install Method |
+| Arch/AUR Package | Aurora Alternative | Install Method |
 |---|---|---|
 | `base-devel` (gcc, make) | `gcc`, `make`, `cmake` | Distrobox |
 | `yay` / `paru` | N/A (use Arch Distrobox) | Distrobox |
 | `nvm` / `pyenv` / `asdf` | **Mise** | Host (userspace) |
 | `neovim` | `brew install neovim` | Homebrew |
-| `hyprland` | COPR / Custom Image | rpm-ostree or image build |
-| `waybar` | COPR / Custom Image | rpm-ostree or image build |
+| `hyprland` | Custom image or COPR | rpm-ostree or image build |
+| `waybar` | Custom image or COPR | rpm-ostree or image build |
 | `ghostty` | Flatpak or Homebrew | Flatpak / Homebrew |
 | `firefox` / `chromium` | Flatpak | `flatpak install` |
 | `docker` | Podman (pre-installed) | Built-in |
@@ -986,15 +1016,15 @@ Need a package?
 
 ```
 [ ] Configure BIOS (IOMMU, SVM, EXPO, ReBAR, Secure Boot)
-[ ] Install Aurora-DX NVIDIA from ISO
+[ ] Install Aurora NVIDIA from ISO
+[ ] Enable developer mode (ujust devmode) and dev groups (ujust dx-group)
 [ ] Pin image to version tag (not latest)
-[ ] Enroll Secure Boot MOK key
-[ ] Verify NVIDIA driver (570.86.16+, open kernel modules)
-[ ] Run ujust nvidia-test
-[ ] Install Hyprland (custom image, COPR, or community image)
+[ ] Verify Secure Boot MOK key (password: universalblue)
+[ ] Verify NVIDIA driver (570.86.16+, open kernel modules, nvidia-smi)
+[ ] Install Hyprland (custom image or community image)
 [ ] Configure Hyprland NVIDIA env vars
 [ ] Layer keyd via rpm-ostree, configure macOS bindings
-[ ] Run ujust setup-virtualization
+[ ] Verify KVM/QEMU virtualization (comes with devmode)
 [ ] Install Mise, configure runtimes
 [ ] Install Homebrew CLI tools
 [ ] Initialize Chezmoi, add all configs
@@ -1013,6 +1043,8 @@ Need a package?
 
 - [Universal Blue / Aurora](https://universal-blue.org/) | [Aurora GitHub](https://github.com/ublue-os/aurora)
 - [Hyprland-Atomic](https://github.com/cjuniorfox/hyprland-atomic) - Community Fedora Atomic Hyprland image
+- [ashbuk/Hyprland-Fedora COPR](https://copr.fedorainfracloud.org/coprs/ashbuk/Hyprland-Fedora/) | [GitHub](https://github.com/AshBuk/Hyprland-Fedora) - Clean Hyprland RPM builds for Fedora
+- [Omadora](https://github.com/elpritchos/omadora) - Minimal Fedora Hyprland install based on Omarchy (standard Fedora, not Atomic)
 - [Omarchy](https://omarchy.org/) | [GitHub](https://github.com/basecamp/omarchy) | [Manual](https://learn.omacom.io/2/the-omarchy-manual)
 - [NVIDIA 570.86.16 Linux Driver (RTX 5080 support)](https://www.phoronix.com/news/NVIDIA-570.86.16-Linux-Driver)
 - [RTX 5080 Linux Driver Guide](https://gist.github.com/jatinkrmalik/86afb07cbe6abf5baa2d29d3842aa328)
