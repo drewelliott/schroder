@@ -1,0 +1,18 @@
+# Mise global runtime configuration
+# Managed by chezmoi
+
+[tools]
+node = "22"
+python = "3.12"
+go = "1.23"
+rust = "stable"
+
+{{ if .is_workstation -}}
+# AI/ML workstation extras
+usage = "latest"
+{{- end }}
+
+[settings]
+experimental = true
+# Automatically trust .mise.toml in known project directories
+trusted_config_paths = ["~/git"]

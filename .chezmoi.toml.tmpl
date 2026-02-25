@@ -1,0 +1,17 @@
+# Chezmoi configuration - prompted on first `chezmoi init`
+# Machine-specific values used in templates
+
+{{- $hostname := promptStringOnce . "hostname" "Hostname" -}}
+{{- $gpu := promptChoiceOnce . "gpu" "GPU vendor" (list "nvidia" "amd" "intel") -}}
+{{- $monitor_primary := promptStringOnce . "monitor_primary" "Primary monitor name (e.g. DP-1, HDMI-A-1, eDP-1)" -}}
+{{- $monitor_res := promptStringOnce . "monitor_res" "Primary monitor resolution (e.g. 3840x2160@144)" -}}
+{{- $monitor_scale := promptStringOnce . "monitor_scale" "Monitor scale factor (e.g. 1.0, 1.25, 1.5)" -}}
+{{- $is_workstation := promptBoolOnce . "is_workstation" "Is this the AI/content creation workstation" -}}
+
+[data]
+    hostname = {{ $hostname | quote }}
+    gpu = {{ $gpu | quote }}
+    monitor_primary = {{ $monitor_primary | quote }}
+    monitor_res = {{ $monitor_res | quote }}
+    monitor_scale = {{ $monitor_scale | quote }}
+    is_workstation = {{ $is_workstation }}

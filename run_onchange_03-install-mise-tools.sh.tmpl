@@ -1,0 +1,14 @@
+#!/bin/bash
+# Install mise runtimes when config changes
+# Hash: {{ include "dot_config/mise/config.toml.tmpl" | sha256sum }}
+
+set -euo pipefail
+
+if ! command -v mise &> /dev/null; then
+    echo "mise not found, skipping runtime installation"
+    exit 0
+fi
+
+echo "Installing mise runtimes..."
+mise install --yes
+echo "mise runtimes installed successfully"
