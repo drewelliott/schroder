@@ -24,6 +24,7 @@ This will:
 3. Install CLI tools via Homebrew (ripgrep, fzf, neovim, lazygit, ollama, etc.)
 4. Create Distrobox containers (fedora-dev, arch-dev, ai-dev)
 5. Configure shell with Omarchy aliases and tmux functions
+6. Install Flatpak apps (OBS, Chrome, Spotify, Discord, Slack, Dropbox, KeePassXC)
 
 ## What's Inside
 
@@ -45,7 +46,7 @@ nicm/nicxm # tml per subdirectory (monorepo workflow)
 | CLI tools | Homebrew | ripgrep, fd, bat, fzf, neovim, lazygit, etc. |
 | Dotfiles | Chezmoi | Templated configs, bootstrap scripts |
 | Containers | Distrobox | fedora-dev, arch-dev (AUR), ai-dev (GPU) |
-| GUI apps | Flatpak | OBS, Chromium, Spotify, LibreOffice |
+| GUI apps | Flatpak | OBS, Chrome, Spotify, Discord, Slack, etc. |
 
 ### AI/ML
 Ollama for local LLM inference on the RTX 5080 (16GB VRAM). GPU-enabled Distrobox container for vLLM, CrewAI, LangGraph, and other agent frameworks.
@@ -70,6 +71,7 @@ run_once_02-install-brew-packages.sh
 run_onchange_03-install-mise-tools.sh.tmpl
 run_once_04-setup-distrobox.sh
 run_once_05-setup-shell.sh
+run_once_06-install-flatpaks.sh
 AURORA-DAY-ZERO.md          # Day Zero installation guide
 ```
 

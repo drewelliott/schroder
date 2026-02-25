@@ -109,14 +109,7 @@ This will:
 3. Deploy Ghostty, tmux, bash, git, and mise configs
 4. Run bootstrap scripts: install Mise, Homebrew CLI tools, Distrobox containers, shell setup
 
-### Flatpak Apps (Manual)
-
-```bash
-flatpak install flathub com.obsproject.Studio
-flatpak install flathub org.chromium.Chromium
-flatpak install flathub com.spotify.Client
-flatpak install flathub org.libreoffice.LibreOffice
-```
+Flatpak apps (OBS, Chrome, Spotify, Discord, Slack, Dropbox, KeePassXC) are installed automatically. Firefox is removed and replaced with Chrome.
 
 ---
 
@@ -130,7 +123,7 @@ flatpak install flathub org.libreoffice.LibreOffice
 [ ] Verify NVIDIA driver (570.86.16+, open kernel modules)
 [ ] Enable developer mode (ujust devmode + ujust dx-group)
 [ ] Run chezmoi init --apply drewelliott/schroder
-[ ] Install Flatpak apps (OBS, Chromium, Spotify)
+[ ] Verify Flatpak apps installed (OBS, Chrome, Spotify, Discord, Slack)
 [ ] Verify: mise install, ollama serve, distrobox list
 ```
 
