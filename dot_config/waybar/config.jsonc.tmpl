@@ -15,7 +15,9 @@
         "cpu",
         "memory",
         "temperature",
+{{ if eq .gpu "nvidia" -}}
         "custom/gpu-temp",
+{{ end -}}
         "pulseaudio",
         "network",
         "battery"
@@ -69,17 +71,19 @@
     "temperature": {
         "thermal-zone": 0,
         "critical-threshold": 85,
-        "format": "{temperatureC}°C",
-        "format-critical": "{temperatureC}°C!",
+        "format": "{temperatureC}\u00b0C",
+        "format-critical": "{temperatureC}\u00b0C!",
         "interval": 5
     },
 
+{{ if eq .gpu "nvidia" -}}
     "custom/gpu-temp": {
         "exec": "nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader 2>/dev/null || echo 'N/A'",
-        "format": "GPU {}°C",
+        "format": "GPU {}\u00b0C",
         "interval": 5,
         "tooltip": false
     },
+{{ end -}}
 
     "pulseaudio": {
         "format": "VOL {volume}%",

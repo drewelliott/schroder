@@ -9,4 +9,6 @@ additional_packages="base-devel git"
 [ai-dev]
 image=registry.fedoraproject.org/fedora-toolbox:42
 additional_packages="gcc gcc-c++ python3-pip python3-devel git curl wget"
+{{ if eq .gpu "nvidia" -}}
 additional_flags="--gpus all"
+{{ end -}}
