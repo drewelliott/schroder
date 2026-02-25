@@ -1,15 +1,17 @@
 #!/bin/bash
-# Install Homebrew CLI tools
-# Aurora-DX ships with Homebrew pre-installed
+# Install Homebrew and CLI tools
 
 set -euo pipefail
 
-# Ensure brew is on PATH (Aurora installs it but profile.d may not be sourced)
+# Ensure brew is on PATH or install it
 if [ -x /home/linuxbrew/.linuxbrew/bin/brew ]; then
     eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-elif ! command -v brew &> /dev/null; then
-    echo "Homebrew not found, skipping"
-    exit 0
+elif command -v brew &> /dev/null; then
+    : # brew already on PATH
+else
+    echo "Installing Homebrew..."
+    NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 fi
 
 echo "Installing Homebrew CLI tools..."
@@ -27,7 +29,7 @@ brew install btop dust duf procs
 brew install jq yq sd xh
 
 # Shell & Terminal
-brew install tmux direnv
+brew install tmux direnv starship
 
 # Editors
 brew install neovim

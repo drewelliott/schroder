@@ -1,6 +1,6 @@
 # Schroder
 
-Chezmoi dotfiles for a terminal-first developer workstation on [Aurora-DX](https://getaurora.dev/) (Immutable Fedora / KDE Plasma). Manages terminal, shell, and dev tool configs — Plasma handles the desktop.
+Chezmoi dotfiles for a terminal-first developer workstation on [Fedora COSMIC Atomic](https://fedoraproject.org/atomic-desktops/cosmic/) (Immutable Fedora / COSMIC Desktop). Manages terminal, shell, and dev tool configs — COSMIC handles the desktop.
 
 ## Hardware Target
 
@@ -12,7 +12,7 @@ Chezmoi dotfiles for a terminal-first developer workstation on [Aurora-DX](https
 
 ## Quick Start
 
-On a fresh Aurora-DX NVIDIA machine:
+On a fresh Fedora COSMIC Atomic machine:
 
 ```bash
 sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply drewelliott/schroder
@@ -21,9 +21,9 @@ sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply drewelliott/schroder
 This will:
 1. Deploy Ghostty, tmux, bash, and git configs
 2. Install Mise and configure runtimes (Node, Python, Go, Rust)
-3. Install CLI tools via Homebrew (ripgrep, fzf, neovim, lazygit, ollama, etc.)
+3. Install Homebrew and CLI tools (ripgrep, fzf, neovim, lazygit, starship, ollama, etc.)
 4. Create Distrobox containers (fedora-dev, arch-dev, ai-dev)
-5. Configure shell with Omarchy aliases and tmux functions
+5. Configure shell integrations (starship, zoxide, direnv, fzf, aliases, tmux functions)
 6. Install Flatpak apps (OBS, Chrome, Spotify, Discord, Slack, Dropbox, KeePassXC)
 
 ## What's Inside
@@ -72,19 +72,19 @@ run_onchange_03-install-mise-tools.sh.tmpl
 run_once_04-setup-distrobox.sh
 run_once_05-setup-shell.sh
 run_once_06-install-flatpaks.sh
-AURORA-DAY-ZERO.md          # Day Zero installation guide
+DAY-ZERO.md                 # Day Zero installation guide
 ```
 
 ## Day Zero Guide
 
-See [AURORA-DAY-ZERO.md](AURORA-DAY-ZERO.md) for the step-by-step installation guide covering BIOS configuration, Aurora-DX installation, NVIDIA driver verification, and everything through to `chezmoi apply`.
+See [DAY-ZERO.md](DAY-ZERO.md) for the step-by-step installation guide covering BIOS configuration, Fedora COSMIC Atomic installation, NVIDIA driver setup, and everything through to `chezmoi apply`.
 
 ## Key Differences from Omarchy
 
 | | Omarchy | Schroder |
 |---|---|---|
-| **Base OS** | Arch Linux (rolling) | Aurora-DX / Fedora Atomic (immutable) |
-| **Desktop** | Hyprland (tiling WM) | KDE Plasma (Aurora default) |
+| **Base OS** | Arch Linux (rolling) | Fedora COSMIC Atomic (immutable) |
+| **Desktop** | Hyprland (tiling WM) | COSMIC (tiling DE) |
 | **Packages** | pacman + AUR | Homebrew + Flatpak + Distrobox |
 | **Updates** | `pacman -Syu` | `rpm-ostree upgrade` (atomic) |
 | **Dotfiles** | Omarchy installer | Chezmoi (templated, multi-machine) |
@@ -93,4 +93,4 @@ See [AURORA-DAY-ZERO.md](AURORA-DAY-ZERO.md) for the step-by-step installation g
 
 ## Credits
 
-Terminal workflow and configs adapted from [Omarchy](https://github.com/basecamp/omarchy) by DHH / Basecamp. Built on [Aurora-DX](https://getaurora.dev/) by the [Universal Blue](https://universal-blue.org/) project.
+Terminal workflow and configs adapted from [Omarchy](https://github.com/basecamp/omarchy) by DHH / Basecamp. Built on [Fedora COSMIC Atomic](https://fedoraproject.org/atomic-desktops/cosmic/) by the [Fedora Project](https://fedoraproject.org/).
