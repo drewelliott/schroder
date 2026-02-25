@@ -10,7 +10,8 @@ fi
 
 echo "Installing Flatpak apps..."
 
-flatpak install -y --noninteractive flathub \
+# Use --user to avoid polkit/system-helper permission issues during automated install
+flatpak install --user -y --noninteractive flathub \
     com.obsproject.Studio \
     com.spotify.Client \
     com.dropbox.Client \
@@ -19,10 +20,10 @@ flatpak install -y --noninteractive flathub \
     com.slack.Slack \
     com.google.Chrome
 
-# Remove Firefox if installed
+# Remove Firefox if installed (check both system and user)
 if flatpak list --app --columns=application | grep -q org.mozilla.firefox; then
     echo "Removing Firefox..."
-    flatpak uninstall -y --noninteractive org.mozilla.firefox
+    flatpak uninstall --user -y --noninteractive org.mozilla.firefox 2>/dev/null || true
 fi
 
 echo "Flatpak apps installed successfully"
