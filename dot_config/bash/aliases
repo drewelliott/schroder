@@ -1,5 +1,8 @@
 # Omarchy bash aliases (DHH, Feb 2026)
 
+# Vi mode for shell line editing
+set -o vi
+
 # File system
 if command -v eza &> /dev/null; then
   alias ls='eza -lh --group-directories-first --icons=auto'
