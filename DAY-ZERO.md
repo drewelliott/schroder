@@ -62,6 +62,34 @@ sudo rpm-ostree override remove firefox firefox-langpacks
 systemctl reboot
 ```
 
+### Install Docker CE
+
+Containerlab (and other networking tools) require Docker. Podman ships with Fedora but is not compatible.
+
+```bash
+# Add Docker CE repo
+sudo tee /etc/yum.repos.d/docker-ce.repo << 'EOF'
+[docker-ce-stable]
+name=Docker CE Stable - $basearch
+baseurl=https://download.docker.com/linux/fedora/$releasever/$basearch/stable
+enabled=1
+gpgcheck=1
+gpgkey=https://download.docker.com/linux/fedora/gpg
+EOF
+
+# Layer Docker CE packages
+sudo rpm-ostree install docker-ce docker-ce-cli containerd.io docker-compose-plugin
+systemctl reboot
+
+# Enable Docker and add your user to the docker group
+sudo systemctl enable --now docker
+sudo usermod -aG docker $USER
+newgrp docker
+
+# Verify
+docker run --rm hello-world
+```
+
 ### NVIDIA Drivers (GPU machines only)
 
 Skip this on AMD-only machines (e.g. NucBox K8 Plus). For NVIDIA:
@@ -117,7 +145,7 @@ This will:
 3. Deploy Alacritty, tmux, bash, git, nvim (LazyVim) configs
 4. Configure shell integrations (starship, zoxide, direnv, fzf, vi mode)
 5. Deploy COSMIC desktop config (keybindings, global auto-tiling, panel, Dusklight theme)
-6. Create Distrobox containers (fedora-dev, arch-dev, ai-dev)
+6. Create Distrobox containers via Docker (fedora-dev, arch-dev, ai-dev)
 7. Install Flatpak apps with permission overrides (OBS, Chrome, Spotify, Discord, Slack, Dropbox, KeePassXC)
 8. Install Cousine Nerd Font
 
@@ -186,6 +214,7 @@ mise trust
 [ ] Install Fedora COSMIC Atomic from ISO
 [ ] Layer packages: alacritty, distrobox, gcc, gcc-c++, tree-sitter-cli
 [ ] Override remove firefox and firefox-langpacks
+[ ] Install Docker CE (add repo, rpm-ostree install, enable service, add to docker group)
 [ ] NVIDIA drivers if applicable (RPM Fusion akmod-nvidia-open)
 [ ] GlobalProtect VPN if needed
 [ ] Pre-seed chezmoi config (optional)

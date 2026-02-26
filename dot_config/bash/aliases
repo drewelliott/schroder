@@ -7,6 +7,9 @@ set -o vi
 export EDITOR=nvim
 export VISUAL=nvim
 
+# Use Docker for Distrobox (required for containerlab compatibility)
+export DBX_CONTAINER_MANAGER=docker
+
 # File system
 if command -v eza &> /dev/null; then
   alias ls='eza -lh --group-directories-first --icons=auto'

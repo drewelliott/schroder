@@ -24,7 +24,7 @@ This will:
 3. Deploy Alacritty, tmux, bash, git, nvim (LazyVim) configs
 4. Configure shell integrations (starship, zoxide, direnv, fzf, vi mode)
 5. Deploy COSMIC desktop config (keybindings, global auto-tiling, panel, Dusklight theme)
-6. Create Distrobox containers (fedora-dev, arch-dev, ai-dev)
+6. Create Distrobox containers via Docker (fedora-dev, arch-dev, ai-dev)
 7. Install Flatpak apps (OBS, Chrome, Spotify, Discord, Slack, Dropbox, KeePassXC)
 8. Install Cousine Nerd Font
 
@@ -69,7 +69,7 @@ g          # git
 | Runtimes | Mise | Node, Python, Go, Rust version management |
 | CLI tools | Homebrew | ripgrep, fd, bat, fzf, neovim, lazygit, etc. |
 | Dotfiles | Chezmoi | Templated configs, bootstrap scripts |
-| Containers | Distrobox | fedora-dev, arch-dev (AUR), ai-dev (GPU) |
+| Containers | Docker + Distrobox | Docker CE runtime, Distrobox dev containers |
 | GUI apps | Flatpak | OBS, Chrome, Spotify, Discord, Slack, etc. |
 
 ### AI/ML
