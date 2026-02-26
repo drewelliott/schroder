@@ -5,6 +5,7 @@ normal = { family = "Cousine Nerd Font", style = "Regular" }
 size = 9
 
 [window]
+decorations = "None"
 padding = { x = 14, y = 14 }
 dynamic_padding = true
 option_as_alt = "Both"
