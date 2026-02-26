@@ -1,0 +1,9 @@
+{
+    (modifiers: [Super], key: "Return"): Spawn("alacritty"),
+    (modifiers: [Super, Shift], key: "b"): Spawn("xdg-open http://"),
+    (modifiers: [Super, Shift], key: "f"): Spawn("xdg-open ~"),
+    (modifiers: [Super, Shift], key: "n"): Spawn("alacritty -e nvim"),
+    (modifiers: [Super, Shift], key: "d"): Spawn("alacritty -e lazydocker"),
+    (modifiers: [Super, Shift], key: "m"): Spawn("flatpak run com.spotify.Client"),
+    (modifiers: [Super], key: "w"): Close,
+}
