@@ -1,7 +1,7 @@
 #!/bin/bash
 # Install Homebrew and CLI tools
 
-set -euo pipefail
+set -uo pipefail
 
 # Ensure brew is on PATH or install it
 if [ -x /home/linuxbrew/.linuxbrew/bin/brew ]; then
@@ -16,28 +16,15 @@ fi
 
 echo "Installing Homebrew CLI tools..."
 
-# File & Search
-brew install ripgrep fd fzf bat eza zoxide tree
-
-# Git & Dev
-brew install lazygit gh git-delta pre-commit
-
-# System & Monitoring
-brew install btop dust duf procs
-
-# Data & Text
-brew install jq yq sd xh
-
-# Shell & Terminal
-brew install tmux direnv starship
-
-# Editors
-brew install neovim
-
-# Container Tools
-brew install lazydocker
-
-# AI/Dev
-brew install ollama
+# Install all packages in one call — brew skips already-installed ones
+brew install \
+    ripgrep fd fzf bat eza zoxide tree \
+    lazygit gh git-delta pre-commit \
+    btop dust duf procs \
+    jq yq sd xh \
+    tmux direnv starship \
+    neovim \
+    lazydocker \
+    ollama
 
 echo "Homebrew packages installed successfully"
