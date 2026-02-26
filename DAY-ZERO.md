@@ -175,6 +175,7 @@ mise trust
 | `lt` / `lta` | eza tree view |
 | `g` | git |
 | `d` | docker |
+| `k` | kubectl |
 
 ---
 

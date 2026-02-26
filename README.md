@@ -50,6 +50,9 @@ t          # attach or start tmux
 n          # open nvim in current directory
 cx         # launch claude code
 c          # launch opencode
+k          # kubectl
+d          # docker
+g          # git
 ```
 
 ### COSMIC Desktop
