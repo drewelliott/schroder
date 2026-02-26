@@ -35,9 +35,8 @@ eval "$(direnv hook bash)"'
 add_to_bashrc "fzf --bash" '# fzf
 eval "$(fzf --bash)"'
 
-# Source Omarchy-style aliases and functions
-add_to_bashrc "bash/aliases" '# Omarchy aliases and tmux functions
-[ -f ~/.config/bash/aliases ] && source ~/.config/bash/aliases
-[ -f ~/.config/bash/fns/tmux ] && source ~/.config/bash/fns/tmux'
+# Source aliases
+add_to_bashrc "bash/aliases" '# Aliases
+[ -f ~/.config/bash/aliases ] && source ~/.config/bash/aliases'
 
 echo "Shell integrations configured"
