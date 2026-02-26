@@ -22,6 +22,10 @@ flatpak install --user -y --noninteractive flathub \
     com.slack.Slack \
     com.google.Chrome
 
+# Flatpak permission overrides
+flatpak override --user --filesystem=home --talk-name=org.kde.StatusNotifierWatcher --talk-name=org.kde.StatusNotifierItem --talk-name=com.canonical.AppIndicator3 com.dropbox.Client
+flatpak override --user --filesystem=~/.local/share/applications --filesystem=~/.local/share/icons com.google.Chrome
+
 # Set Chrome as default browser
 xdg-settings set default-web-browser com.google.Chrome.desktop 2>/dev/null || true
 
