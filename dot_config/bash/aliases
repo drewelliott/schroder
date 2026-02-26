@@ -1,5 +1,10 @@
 # Omarchy bash aliases (DHH, Feb 2026)
 
+# Restore bash-completion lazy loader (fzf --bash overwrites the -D handler)
+if type _comp_complete_load &>/dev/null; then
+  complete -D -F _comp_complete_load
+fi
+
 # Vi mode for shell line editing
 set -o vi
 

@@ -70,6 +70,7 @@ g          # git
 | CLI tools | Homebrew | ripgrep, fd, bat, fzf, neovim, lazygit, etc. |
 | Dotfiles | Chezmoi | Templated configs, bootstrap scripts |
 | Containers | Docker + Distrobox | Docker CE runtime, Distrobox dev containers |
+| Network lab | Containerlab | Virtual network topologies with NOS containers |
 | GUI apps | Flatpak | OBS, Chrome, Spotify, Discord, Slack, etc. |
 
 ### AI/ML

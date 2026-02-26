@@ -90,6 +90,22 @@ newgrp docker
 docker run --rm hello-world
 ```
 
+### Install Containerlab
+
+Network emulation tool for building virtual network topologies with real NOS containers. Installed as a layered RPM for self-update support (`sudo containerlab version upgrade`).
+
+```bash
+# Get latest version from GitHub releases
+CLAB_VERSION=$(curl -sL https://github.com/srl-labs/containerlab/releases/latest -o /dev/null -w '%{url_effective}' | grep -oP 'v\K[^/]+')
+
+# Layer the RPM
+sudo rpm-ostree install https://github.com/srl-labs/containerlab/releases/download/v${CLAB_VERSION}/containerlab_${CLAB_VERSION}_linux_amd64.rpm
+systemctl reboot
+
+# Verify
+containerlab version
+```
+
 ### NVIDIA Drivers (GPU machines only)
 
 Skip this on AMD-only machines (e.g. NucBox K8 Plus). For NVIDIA:
@@ -215,6 +231,7 @@ mise trust
 [ ] Layer packages: alacritty, distrobox, gcc, gcc-c++, tree-sitter-cli
 [ ] Override remove firefox and firefox-langpacks
 [ ] Install Docker CE (add repo, rpm-ostree install, enable service, add to docker group)
+[ ] Install Containerlab (RPM from GitHub releases)
 [ ] NVIDIA drivers if applicable (RPM Fusion akmod-nvidia-open)
 [ ] GlobalProtect VPN if needed
 [ ] Pre-seed chezmoi config (optional)
