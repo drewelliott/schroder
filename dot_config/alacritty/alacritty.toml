@@ -17,3 +17,32 @@ bindings = [
   { key = "Insert", mods = "Shift", action = "Paste" },
   { key = "Insert", mods = "Control", action = "Copy" },
 ]
+
+# Dusklight color scheme (matches COSMIC theme)
+[colors.primary]
+background = "#060820"
+foreground = "#99dfff"
+
+[colors.cursor]
+text = "#060820"
+cursor = "#ff8000"
+
+[colors.normal]
+black   = "#04132d"
+red     = "#ffb5b5"
+green   = "#acf7d2"
+yellow  = "#fff09e"
+blue    = "#93ebeb"
+magenta = "#cf7cff"
+cyan    = "#62d0df"
+white   = "#c5c5c5"
+
+[colors.bright]
+black   = "#2f2f2f"
+red     = "#ff9f90"
+green   = "#5edb8b"
+yellow  = "#ffa27c"
+blue    = "#99dfff"
+magenta = "#f83983"
+cyan    = "#93ebeb"
+white   = "#ffffff"
