@@ -3,6 +3,10 @@
 # Vi mode for shell line editing
 set -o vi
 
+# Default editor
+export EDITOR=nvim
+export VISUAL=nvim
+
 # File system
 if command -v eza &> /dev/null; then
   alias ls='eza -lh --group-directories-first --icons=auto'

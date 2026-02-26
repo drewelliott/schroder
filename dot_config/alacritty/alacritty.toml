@@ -1,0 +1,19 @@
+# Alacritty configuration
+
+[font]
+normal = { family = "JetBrainsMono Nerd Font", style = "Regular" }
+size = 9
+
+[window]
+padding = { x = 14, y = 14 }
+dynamic_padding = true
+option_as_alt = "Both"
+
+[cursor]
+style = { shape = "Block", blinking = "Never" }
+
+[keyboard]
+bindings = [
+  { key = "Insert", mods = "Shift", action = "Paste" },
+  { key = "Insert", mods = "Control", action = "Copy" },
+]
