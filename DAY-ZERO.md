@@ -116,9 +116,9 @@ This will:
 2. Install Mise and configure runtimes (Node, Python, Go, Rust)
 3. Deploy Alacritty, tmux, bash, git, nvim (LazyVim) configs
 4. Configure shell integrations (starship, zoxide, direnv, fzf, vi mode)
-5. Deploy COSMIC desktop config (Omarchy-style keybindings, auto-tiling, no dock)
+5. Deploy COSMIC desktop config (keybindings, global auto-tiling, panel, Dusklight theme)
 6. Create Distrobox containers (fedora-dev, arch-dev, ai-dev)
-7. Install Flatpak apps (OBS, Chrome, Spotify, Discord, Slack, Dropbox, KeePassXC)
+7. Install Flatpak apps with permission overrides (OBS, Chrome, Spotify, Discord, Slack, Dropbox, KeePassXC)
 8. Install Cousine Nerd Font
 
 ### Post-Apply
@@ -127,7 +127,10 @@ This will:
 # Trust mise config
 mise trust
 
-# Log out and back in for COSMIC config to take effect (keybindings, tiling, dock removal)
+# Import Dusklight theme: COSMIC Settings > Appearance > Import Theme
+# Select ~/.config/cosmic/themes/Dusklight.ron
+
+# Log out and back in for COSMIC config to take effect (keybindings, tiling, panel)
 ```
 
 ---
@@ -158,6 +161,23 @@ mise trust
 
 ---
 
+## Shell Aliases
+
+| Alias | Command |
+|---|---|
+| `t` | Attach or start tmux session |
+| `n` / `n <file>` | Open nvim (defaults to current dir) |
+| `cx` | Launch Claude Code |
+| `c` | Launch OpenCode |
+| `ff` | fzf with bat preview |
+| `eff` | Open fzf result in $EDITOR |
+| `ls` / `lsa` | eza with icons |
+| `lt` / `lta` | eza tree view |
+| `g` | git |
+| `d` | docker |
+
+---
+
 ## Day Zero Checklist
 
 ```
@@ -170,9 +190,11 @@ mise trust
 [ ] Pre-seed chezmoi config (optional)
 [ ] Run chezmoi init --apply drewelliott/schroder
 [ ] Run mise trust
+[ ] Import Dusklight theme in COSMIC Settings
 [ ] Log out / log in for COSMIC config
-[ ] Verify: nvim launches, tiling works, keybindings work
-[ ] Verify Flatpak apps (OBS, Chrome, Spotify, Discord, Slack)
+[ ] Verify: alacritty, nvim, tmux themed correctly
+[ ] Verify: tiling works, keybindings work
+[ ] Verify: Flatpak apps (OBS, Chrome, Spotify, Discord, Slack, Dropbox)
 [ ] Verify: mise install, ollama serve, distrobox list
 ```
 
