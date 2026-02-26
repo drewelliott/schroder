@@ -1,0 +1,5 @@
+[Desktop Entry]
+Type=Application
+Name=Dropbox
+Exec=flatpak run com.dropbox.Client
+X-GNOME-Autostart-enabled=true
