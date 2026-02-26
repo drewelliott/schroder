@@ -25,6 +25,7 @@ This will:
 4. Create Distrobox containers (fedora-dev, arch-dev, ai-dev)
 5. Configure shell integrations (starship, zoxide, direnv, fzf, aliases, tmux functions)
 6. Install Flatpak apps (OBS, Chrome, Spotify, Discord, Slack, Dropbox, KeePassXC)
+7. Install JetBrainsMono Nerd Font
 
 ## What's Inside
 
@@ -72,6 +73,7 @@ run_onchange_03-install-mise-tools.sh.tmpl
 run_once_04-setup-distrobox.sh
 run_once_05-setup-shell.sh
 run_once_06-install-flatpaks.sh
+run_once_07-install-nerd-fonts.sh
 DAY-ZERO.md                 # Day Zero installation guide
 ```
 
