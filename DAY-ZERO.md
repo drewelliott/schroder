@@ -55,6 +55,10 @@ sudo dd if=Fedora-COSMIC-Atomic-ostree-x86_64-43-1.6.iso of=/dev/sdX bs=4M statu
 ```bash
 # Alacritty terminal, Distrobox containers, build tools for nvim treesitter
 sudo rpm-ostree install alacritty distrobox gcc gcc-c++ tree-sitter-cli
+
+# Remove Firefox from base image (Chrome installed via Flatpak)
+sudo rpm-ostree override remove firefox firefox-langpacks
+
 systemctl reboot
 ```
 
@@ -160,6 +164,7 @@ mise trust
 [ ] Configure BIOS (IOMMU, SVM, EXPO, ReBAR, Secure Boot)
 [ ] Install Fedora COSMIC Atomic from ISO
 [ ] Layer packages: alacritty, distrobox, gcc, gcc-c++, tree-sitter-cli
+[ ] Override remove firefox and firefox-langpacks
 [ ] NVIDIA drivers if applicable (RPM Fusion akmod-nvidia-open)
 [ ] GlobalProtect VPN if needed
 [ ] Pre-seed chezmoi config (optional)

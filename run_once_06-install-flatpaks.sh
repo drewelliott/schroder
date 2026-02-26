@@ -22,10 +22,7 @@ flatpak install --user -y --noninteractive flathub \
     com.slack.Slack \
     com.google.Chrome
 
-# Remove Firefox if installed (check both system and user)
-if flatpak list --app --columns=application | grep -q org.mozilla.firefox; then
-    echo "Removing Firefox..."
-    flatpak uninstall --user -y --noninteractive org.mozilla.firefox 2>/dev/null || true
-fi
+# Set Chrome as default browser
+xdg-settings set default-web-browser com.google.Chrome.desktop 2>/dev/null || true
 
 echo "Flatpak apps installed successfully"
