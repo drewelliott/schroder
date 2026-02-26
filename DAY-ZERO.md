@@ -1,6 +1,6 @@
 # Day Zero: Fedora COSMIC Atomic Installation Guide
 
-> Fedora COSMIC Atomic (Immutable Fedora / COSMIC Desktop) + NVIDIA + Terminal Dev Toolkit
+> Fedora COSMIC Atomic (Immutable Fedora / COSMIC Desktop) + Terminal Dev Toolkit
 >
 > **Hardware**: AMD Ryzen 9 9950X | NVIDIA RTX 5080 | 64GB DDR5-6000 | ASUS ROG Strix X870E-E
 
@@ -48,15 +48,25 @@ sudo dd if=Fedora-COSMIC-Atomic-ostree-x86_64-43-1.6.iso of=/dev/sdX bs=4M statu
 
 ---
 
-## Phase 2: First Boot & NVIDIA Setup
+## Phase 2: First Boot & System Packages
 
-### Install NVIDIA Drivers
+### Layer Required Packages
 
-Fedora COSMIC Atomic ships with nouveau by default. Install the RPM Fusion NVIDIA drivers:
+```bash
+# Alacritty terminal, Distrobox containers, build tools for nvim treesitter
+sudo rpm-ostree install alacritty distrobox gcc gcc-c++ tree-sitter-cli
+systemctl reboot
+```
+
+### NVIDIA Drivers (GPU machines only)
+
+Skip this on AMD-only machines (e.g. NucBox K8 Plus). For NVIDIA:
 
 ```bash
 # Enable RPM Fusion repos
-sudo rpm-ostree install https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+sudo rpm-ostree install \
+    https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm \
+    https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
 systemctl reboot
 
 # Install NVIDIA drivers (open kernel modules for RTX 5080)
@@ -67,10 +77,11 @@ systemctl reboot
 nvidia-smi
 ```
 
-### Install Distrobox
+### GlobalProtect VPN (if needed)
 
 ```bash
-sudo rpm-ostree install distrobox
+curl -O https://d2hvyxt0t758wb.cloudfront.net/gp_install_files/GlobalProtect_rpm-6.3.3.1-616.rpm
+sudo rpm-ostree install ./GlobalProtect_rpm-6.3.3.1-616.rpm
 systemctl reboot
 ```
 
@@ -78,20 +89,68 @@ systemctl reboot
 
 ## Phase 3: Apply Dotfiles
 
+### Pre-seed Config (optional, skips interactive prompts)
+
 ```bash
-# One-liner to bootstrap everything
+mkdir -p ~/.config/chezmoi
+cat > ~/.config/chezmoi/chezmoi.toml << 'EOF'
+[data]
+    hostname = "schroder"
+    gpu = "amd"
+    is_workstation = false
+EOF
+```
+
+### Run Chezmoi
+
+```bash
 sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply drewelliott/schroder
 ```
 
 This will:
-1. Install Chezmoi and clone the dotfiles repo
-2. Prompt for machine-specific values (hostname, GPU vendor, workstation flag)
-3. Install Homebrew and CLI tools (ripgrep, fzf, neovim, starship, lazygit, etc.)
-4. Install Mise and configure runtimes (Node, Python, Go, Rust)
-5. Deploy Ghostty, tmux, bash, git configs
-6. Configure shell integrations (starship, zoxide, direnv, fzf)
-7. Create Distrobox containers (fedora-dev, arch-dev, ai-dev)
-8. Install Flatpak apps (OBS, Chrome, Spotify, Discord, Slack, Dropbox, KeePassXC)
+1. Install Homebrew and CLI tools (ripgrep, fzf, neovim, starship, lazygit, ollama, etc.)
+2. Install Mise and configure runtimes (Node, Python, Go, Rust)
+3. Deploy Alacritty, tmux, bash, git, nvim (LazyVim) configs
+4. Configure shell integrations (starship, zoxide, direnv, fzf, vi mode)
+5. Deploy COSMIC desktop config (Omarchy-style keybindings, auto-tiling, no dock)
+6. Create Distrobox containers (fedora-dev, arch-dev, ai-dev)
+7. Install Flatpak apps (OBS, Chrome, Spotify, Discord, Slack, Dropbox, KeePassXC)
+8. Install Cousine Nerd Font
+
+### Post-Apply
+
+```bash
+# Trust mise config
+mise trust
+
+# Log out and back in for COSMIC config to take effect (keybindings, tiling, dock removal)
+```
+
+---
+
+## Keybindings (Omarchy-style)
+
+| Shortcut | Action |
+|---|---|
+| Super + Enter | Alacritty terminal |
+| Super + T | Alacritty (system terminal) |
+| Super + Shift + B | Web browser |
+| Super + Shift + N | Neovim |
+| Super + Shift + D | Lazydocker |
+| Super + Shift + M | Spotify |
+| Super + W | Close window |
+| Super + / | Launcher |
+| Super + A | App library |
+| Super + hjkl | Focus navigation (vim-style) |
+| Super + Shift + hjkl | Move windows |
+| Super + 1-9 | Switch workspace |
+| Super + Shift + 1-9 | Move window to workspace |
+| Super + G | Toggle floating/tiling |
+| Super + Y | Toggle tiling for workspace |
+| Super + M | Maximize |
+| Super + F11 | Fullscreen |
+| Super + drag | Move floating window |
+| Super + right-drag | Resize floating window |
 
 ---
 
@@ -100,11 +159,15 @@ This will:
 ```
 [ ] Configure BIOS (IOMMU, SVM, EXPO, ReBAR, Secure Boot)
 [ ] Install Fedora COSMIC Atomic from ISO
-[ ] Install NVIDIA drivers (RPM Fusion akmod-nvidia-open)
-[ ] Verify NVIDIA driver (nvidia-smi)
-[ ] Install Distrobox (rpm-ostree install distrobox)
+[ ] Layer packages: alacritty, distrobox, gcc, gcc-c++, tree-sitter-cli
+[ ] NVIDIA drivers if applicable (RPM Fusion akmod-nvidia-open)
+[ ] GlobalProtect VPN if needed
+[ ] Pre-seed chezmoi config (optional)
 [ ] Run chezmoi init --apply drewelliott/schroder
-[ ] Verify Flatpak apps installed (OBS, Chrome, Spotify, Discord, Slack)
+[ ] Run mise trust
+[ ] Log out / log in for COSMIC config
+[ ] Verify: nvim launches, tiling works, keybindings work
+[ ] Verify Flatpak apps (OBS, Chrome, Spotify, Discord, Slack)
 [ ] Verify: mise install, ollama serve, distrobox list
 ```
 
