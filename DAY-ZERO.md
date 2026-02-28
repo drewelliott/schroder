@@ -82,8 +82,10 @@ sudo rpm-ostree install docker-ce docker-ce-cli containerd.io docker-compose-plu
 systemctl reboot
 
 # Enable Docker and add your user to the docker group
+# NOTE: usermod silently fails on atomic Fedora because the docker group
+# lives in /usr/lib/group (image layer), not /etc/group. Add it manually.
 sudo systemctl enable --now docker
-sudo usermod -aG docker $USER
+sudo sh -c "echo docker:x:$(getent group docker | cut -d: -f3):$USER >> /etc/group"
 newgrp docker
 
 # Verify
