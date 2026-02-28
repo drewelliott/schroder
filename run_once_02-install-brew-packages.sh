@@ -21,7 +21,7 @@ brew install \
     ripgrep fd fzf bat eza zoxide tree \
     lazygit gh git-delta pre-commit \
     btop dust duf procs \
-    jq yq sd xh \
+    jq yq sd xh glow \
     tmux direnv starship \
     neovim \
     lazydocker \
