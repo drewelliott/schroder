@@ -14,13 +14,13 @@ echo "Installing Flatpak apps..."
 flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 
 flatpak install --user -y --noninteractive flathub \
-    com.obsproject.Studio \
     com.spotify.Client \
     com.dropbox.Client \
     org.keepassxc.KeePassXC \
     com.discordapp.Discord \
     com.slack.Slack \
-    com.google.Chrome
+    com.google.Chrome \
+    md.obsidian.Obsidian
 
 # Flatpak permission overrides
 flatpak override --user --filesystem=home --talk-name=org.kde.StatusNotifierWatcher --talk-name=org.kde.StatusNotifierItem --talk-name=com.canonical.AppIndicator3 com.dropbox.Client

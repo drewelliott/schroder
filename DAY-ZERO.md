@@ -153,6 +153,28 @@ systemctl reboot
 nvidia-smi
 ```
 
+### OBS Studio + DroidCam (layered, not Flatpak)
+
+OBS is layered via rpm-ostree so the droidcam plugin can access the v4l2loopback kernel module directly.
+
+```bash
+# Install OBS, droidcam plugin, and v4l2loopback (akmod builds the kernel module)
+sudo rpm-ostree install obs-studio obs-studio-plugin-droidcam akmod-v4l2loopback v4l2loopback
+systemctl reboot
+
+# Build signed v4l2loopback kmod (same MOK signing flow as NVIDIA)
+sudo akmods --force
+# akmods install fails on atomic — install the built RPM manually:
+sudo rpm-ostree install /var/cache/akmods/v4l2loopback/*-$(uname -r)-*.rpm
+# Remove akmod (unsigned modules conflict with signed kmod)
+sudo rpm-ostree uninstall akmod-v4l2loopback
+systemctl reboot
+
+# Verify
+lsmod | grep v4l2loopback
+obs --version
+```
+
 ### GlobalProtect VPN (if needed)
 
 ```bash
@@ -190,7 +212,7 @@ This will:
 4. Configure shell integrations (starship, zoxide, direnv, fzf, vi mode)
 5. Deploy COSMIC desktop config (keybindings, global auto-tiling, panel, Dusklight theme)
 6. Create Distrobox containers via Docker (fedora-dev, arch-dev, ai-dev)
-7. Install Flatpak apps with permission overrides (OBS, Chrome, Spotify, Discord, Slack, Dropbox, KeePassXC)
+7. Install Flatpak apps with permission overrides (Chrome, Spotify, Discord, Slack, Dropbox, KeePassXC, Obsidian)
 8. Install Cousine Nerd Font
 
 ### Post-Apply
@@ -261,6 +283,7 @@ mise trust
 [ ] Install Docker CE (add repo, rpm-ostree install, enable service, add to docker group)
 [ ] Install Containerlab (RPM from GitHub releases)
 [ ] NVIDIA drivers if applicable (RPM Fusion akmod-nvidia + MOK signing for Secure Boot)
+[ ] OBS Studio + DroidCam (layered rpm-ostree, v4l2loopback kmod signed via MOK)
 [ ] GlobalProtect VPN if needed
 [ ] Pre-seed chezmoi config (optional)
 [ ] Run chezmoi init --apply drewelliott/schroder
@@ -269,7 +292,8 @@ mise trust
 [ ] Log out / log in for COSMIC config
 [ ] Verify: alacritty, nvim, tmux themed correctly
 [ ] Verify: tiling works, keybindings work
-[ ] Verify: Flatpak apps (OBS, Chrome, Spotify, Discord, Slack, Dropbox)
+[ ] Verify: Flatpak apps (Chrome, Spotify, Discord, Slack, Dropbox, Obsidian)
+[ ] Verify: OBS with droidcam plugin and v4l2loopback
 [ ] Verify: mise install, ollama serve, distrobox list
 ```
 
