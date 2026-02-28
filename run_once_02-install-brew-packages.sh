@@ -25,6 +25,7 @@ brew install \
     tmux direnv starship \
     neovim \
     lazydocker \
-    ollama
+    ollama \
+    fastfetch
 
 echo "Homebrew packages installed successfully"
