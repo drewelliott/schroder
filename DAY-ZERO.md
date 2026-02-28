@@ -110,7 +110,7 @@ containerlab version
 
 ### NVIDIA Drivers (GPU machines only)
 
-Skip this on AMD-only machines (e.g. NucBox K8 Plus). For NVIDIA:
+Skip this on AMD-only machines (e.g. NucBox K8 Plus). For NVIDIA with Secure Boot:
 
 ```bash
 # Enable RPM Fusion repos (replace 43 with your Fedora version)
@@ -119,8 +119,34 @@ sudo rpm-ostree install \
     https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-43.noarch.rpm
 systemctl reboot
 
-# Install NVIDIA drivers (uses open kernel modules automatically for Turing+)
+# Install NVIDIA driver packages and build tools
 sudo rpm-ostree install akmod-nvidia xorg-x11-drv-nvidia-cuda
+systemctl reboot
+
+# Sign kernel modules for Secure Boot (MOK enrollment)
+# Generate signing key (skip if already exists)
+sudo kmodgenca
+
+# Import key into MOK — set a one-time password you'll enter at next boot
+sudo mokutil --import /etc/pki/akmods/certs/public_key.der
+
+# Reboot — MOK Manager (blue screen) will appear:
+# Select: Enroll MOK > Continue > Yes > enter password > Reboot
+systemctl reboot
+
+# Build signed kmod and install it
+sudo akmods --force
+# NOTE: akmods install step fails on atomic (no dnf/yum), install the RPM manually:
+sudo rpm-ostree install /var/cache/akmods/nvidia/*-$(uname -r)-*.rpm
+# Remove akmod-nvidia (its unsigned modules conflict with the signed kmod)
+sudo rpm-ostree uninstall akmod-nvidia
+
+# Blacklist nouveau so nvidia can claim the GPU
+sudo tee /etc/modprobe.d/blacklist-nouveau.conf << 'EOF'
+blacklist nouveau
+options nouveau modeset=0
+EOF
+sudo rpm-ostree kargs --append=rd.driver.blacklist=nouveau --append=modprobe.blacklist=nouveau
 systemctl reboot
 
 # Verify
@@ -234,7 +260,7 @@ mise trust
 [ ] Override remove firefox and firefox-langpacks
 [ ] Install Docker CE (add repo, rpm-ostree install, enable service, add to docker group)
 [ ] Install Containerlab (RPM from GitHub releases)
-[ ] NVIDIA drivers if applicable (RPM Fusion akmod-nvidia-open)
+[ ] NVIDIA drivers if applicable (RPM Fusion akmod-nvidia + MOK signing for Secure Boot)
 [ ] GlobalProtect VPN if needed
 [ ] Pre-seed chezmoi config (optional)
 [ ] Run chezmoi init --apply drewelliott/schroder
