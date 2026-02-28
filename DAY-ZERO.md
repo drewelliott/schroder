@@ -113,10 +113,10 @@ containerlab version
 Skip this on AMD-only machines (e.g. NucBox K8 Plus). For NVIDIA:
 
 ```bash
-# Enable RPM Fusion repos
+# Enable RPM Fusion repos (replace 43 with your Fedora version)
 sudo rpm-ostree install \
-    https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm \
-    https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+    https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-43.noarch.rpm \
+    https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-43.noarch.rpm
 systemctl reboot
 
 # Install NVIDIA drivers (open kernel modules for RTX 5080)
