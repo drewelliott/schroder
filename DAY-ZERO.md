@@ -119,8 +119,8 @@ sudo rpm-ostree install \
     https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-43.noarch.rpm
 systemctl reboot
 
-# Install NVIDIA drivers (open kernel modules for RTX 5080)
-sudo rpm-ostree install akmod-nvidia-open xorg-x11-drv-nvidia-cuda
+# Install NVIDIA drivers (uses open kernel modules automatically for Turing+)
+sudo rpm-ostree install akmod-nvidia xorg-x11-drv-nvidia-cuda
 systemctl reboot
 
 # Verify
