@@ -10,3 +10,17 @@ Host github.com
     HostName github.com
     User git
     IdentityFile ~/.ssh/id_ed25519
+
+Host schroder
+    Hostname 192.168.248.8
+    User drew
+    UserKnownHostsFile /dev/null
+    IdentityFile ~/.ssh/id_ed25519
+    StrictHostKeyChecking no
+
+Host charlie
+    Hostname 192.168.248.9
+    User drew
+    UserKnownHostsFile /dev/null
+    IdentityFile ~/.ssh/id_ed25519
+    StrictHostKeyChecking no
