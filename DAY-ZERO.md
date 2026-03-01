@@ -153,13 +153,13 @@ systemctl reboot
 nvidia-smi
 ```
 
-### OBS Studio + DroidCam (layered, not Flatpak)
+### v4l2loopback (virtual camera kernel module)
 
-OBS is layered via rpm-ostree so the droidcam plugin can access the v4l2loopback kernel module directly.
+Required for OBS Virtual Camera and DroidCam. OBS itself is installed via Flatpak (managed by chezmoi).
 
 ```bash
-# Install OBS, droidcam plugin, and v4l2loopback (akmod builds the kernel module)
-sudo rpm-ostree install obs-studio obs-studio-plugin-droidcam akmod-v4l2loopback v4l2loopback
+# Install v4l2loopback (akmod builds the kernel module)
+sudo rpm-ostree install akmod-v4l2loopback v4l2loopback
 systemctl reboot
 
 # Build signed v4l2loopback kmod (same MOK signing flow as NVIDIA)
@@ -172,7 +172,6 @@ systemctl reboot
 
 # Verify
 lsmod | grep v4l2loopback
-obs --version
 ```
 
 ### GlobalProtect VPN (if needed)
@@ -212,7 +211,7 @@ This will:
 4. Configure shell integrations (starship, zoxide, direnv, fzf, vi mode)
 5. Deploy COSMIC desktop config (keybindings, global auto-tiling, panel, Dusklight theme)
 6. Create Distrobox containers via Docker (fedora-dev, arch-dev, ai-dev)
-7. Install Flatpak apps with permission overrides (Chrome, Spotify, Discord, Slack, Dropbox, KeePassXC, Obsidian)
+7. Install Flatpak apps with permission overrides (Chrome, Spotify, Discord, Slack, Dropbox, KeePassXC, Obsidian, OBS Studio + plugins)
 8. Install Cousine Nerd Font
 
 ### Post-Apply
@@ -283,7 +282,7 @@ mise trust
 [ ] Install Docker CE (add repo, rpm-ostree install, enable service, add to docker group)
 [ ] Install Containerlab (RPM from GitHub releases)
 [ ] NVIDIA drivers if applicable (RPM Fusion akmod-nvidia + MOK signing for Secure Boot)
-[ ] OBS Studio + DroidCam (layered rpm-ostree, v4l2loopback kmod signed via MOK)
+[ ] v4l2loopback kmod (layered rpm-ostree, signed via MOK)
 [ ] GlobalProtect VPN if needed
 [ ] Pre-seed chezmoi config (optional)
 [ ] Run chezmoi init --apply drewelliott/schroder
@@ -293,7 +292,7 @@ mise trust
 [ ] Verify: alacritty, nvim, tmux themed correctly
 [ ] Verify: tiling works, keybindings work
 [ ] Verify: Flatpak apps (Chrome, Spotify, Discord, Slack, Dropbox, Obsidian)
-[ ] Verify: OBS with droidcam plugin and v4l2loopback
+[ ] Verify: OBS (Flatpak) with DroidCam, NDI, MoveTransition plugins and v4l2loopback
 [ ] Verify: mise install, ollama serve, distrobox list
 ```
 

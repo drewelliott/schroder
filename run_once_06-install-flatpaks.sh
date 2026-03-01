@@ -20,7 +20,10 @@ flatpak install --user -y --noninteractive flathub \
     com.discordapp.Discord \
     com.slack.Slack \
     com.google.Chrome \
-    md.obsidian.Obsidian
+    md.obsidian.Obsidian \
+    com.obsproject.Studio \
+    com.obsproject.Studio.Plugin.DroidCam \
+    com.obsproject.Studio.Plugin.MoveTransition
 
 # Flatpak permission overrides
 flatpak override --user --filesystem=home --talk-name=org.kde.StatusNotifierWatcher --talk-name=org.kde.StatusNotifierItem --talk-name=com.canonical.AppIndicator3 com.dropbox.Client
