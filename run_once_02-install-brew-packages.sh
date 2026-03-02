@@ -26,6 +26,7 @@ brew install \
     neovim \
     lazydocker \
     ollama \
-    fastfetch
+    fastfetch \
+    uv
 
 echo "Homebrew packages installed successfully"
